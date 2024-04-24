@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1031424794749",
+    "project_id": "facultysupportdesk",
+    "storage_bucket": "facultysupportdesk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031424794749:android:9231e2273cd39c8b221114",
+        "android_client_info": {
+          "package_name": "com.facultysupportdesk.facultysupportdesk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1031424794749-d7ih8en1unk5q10gnb96ktfl9hsqrt6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO9f7Mcud7SNGzQ0cJAEHh2tKEisadtvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1031424794749-d7ih8en1unk5q10gnb96ktfl9hsqrt6e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1031424794749-h6mkm3acm940t62n56nfn2ah0773jdoi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.facultysupportdesk.facultysupportdesk.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
