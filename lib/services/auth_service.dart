@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facultysupportdesk/mixins/display_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:facultysupportdesk/firebase_options.dart';
 
 final _firebase = FirebaseAuth.instance;
 final CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -10,6 +11,9 @@ class AuthService with DisplayMixin{
 
   Future<void> signInWithGoogle() async {
     try {
+      if (DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.windows) {
+
+      }
       final GoogleSignInAccount? googleUser = await GoogleSignIn(
           clientId: '1031424794749-d7ih8en1unk5q10gnb96ktfl9hsqrt6e.apps.googleusercontent.com'
       ).signIn();
@@ -60,6 +64,8 @@ class AuthService with DisplayMixin{
       });
     }
   }
+
+
 
 
 }
