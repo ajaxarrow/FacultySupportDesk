@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:facultysupportdesk/mixins/display_mixin.dart';
+import 'package:facultysupportdesk/models/mixins/display_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:facultysupportdesk/firebase_options.dart';
+
 
 final _firebase = FirebaseAuth.instance;
 final CollectionReference users = FirebaseFirestore.instance.collection('users');

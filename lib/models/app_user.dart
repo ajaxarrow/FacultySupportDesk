@@ -70,5 +70,15 @@ class AppUser with DisplayMixin{
     }
   }
 
+  Future<AppUser> getUserById(String id) async {
+    QuerySnapshot querySnapshot =  await users
+        .where('id', isEqualTo: id)
+        .get();
+
+    final result = querySnapshot.docs.map((doc) =>
+        AppUser.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    return result[0];
+  }
+
 
 }

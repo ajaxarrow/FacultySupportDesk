@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -26,12 +27,18 @@ const _navBarItems = [
     activeIcon: PhosphorIcon(PhosphorIconsFill.calendar),
     label: 'Calendar View',
   ),
+  BottomNavigationBarItem(
+    icon: Icon(Icons.logout), // Logout icon
+    label: 'Logout',
+  ),
 ];
+
 
 var _navBarItemLinks = [
   '/main',
   '/history',
-  '/calendar'
+  '/calendar',
+  '/logout'
 ];
 
 
@@ -58,9 +65,14 @@ class _MainLayoutState extends State<MainLayout> {
           items: _navBarItems,
           currentIndex: _selectedIndex,
           onTap: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            if (index == _navBarItems.length - 1) {
+              FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushReplacementNamed('/redirect');
+            } else {
+              setState(() {
+                _selectedIndex = index;
+              });
+            }
           })
           : null,
       body: Row(
@@ -69,7 +81,14 @@ class _MainLayoutState extends State<MainLayout> {
             NavigationRail(
               selectedIndex: _selectedIndex,
               onDestinationSelected: (int index) {
-                Navigator.of(context).pushReplacementNamed(_navBarItemLinks[index]);
+                if (index == _navBarItems.length - 1) {
+                  print('hi');
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushReplacementNamed('/redirect');
+                } else {
+                  Navigator.of(context).pushReplacementNamed(_navBarItemLinks[index]);
+                }
+
               },
               extended: isLargeScreen,
               leading: Container(
