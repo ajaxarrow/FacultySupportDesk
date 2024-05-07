@@ -44,7 +44,7 @@ class ConsultationRequest with DisplayMixin{
       proposedTimeStart: data['proposedTimeStart'],
       proposedTimeEnd: data['proposedTimeEnd'],
       status: data['status'],
-      statusUpdateDate: data['statusUpdateData'],
+      statusUpdateDate: data['statusUpdateDate'],
       facultyComment: data['facultyComment']
     );
   }

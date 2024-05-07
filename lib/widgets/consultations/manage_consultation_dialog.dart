@@ -23,8 +23,13 @@ class ManageConsultationDialog extends StatelessWidget {
       }
       form.currentState!.save();
       consultationRequest.manageConsultationRequest();
-      onUpdateConsultationList();
       Navigator.pop(context);
+      onUpdateConsultationList();
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 2),
+        content: Text("Consultation Request ${consultationRequest.status}"),
+      ));
     }
 
     return Padding(

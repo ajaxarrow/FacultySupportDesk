@@ -54,6 +54,14 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
                           child: Text('Schedule View'),
                         ),
                         DropdownMenuItem(
+                          value: CalendarView.timelineDay,
+                          child: Text('Timeline View'),
+                        ),
+                        DropdownMenuItem(
+                          value: CalendarView.workWeek,
+                          child: Text('Workweek View'),
+                        ),
+                        DropdownMenuItem(
                           value: CalendarView.day,
                           child: Text('Day View'),
                         ),
@@ -74,6 +82,20 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SfCalendar(
+                    monthViewSettings: const MonthViewSettings(
+                      showAgenda: true,
+                      agendaViewHeight: 200
+                    ),
+                    allowViewNavigation: true,
+                    allowedViews: const <CalendarView>[
+                      CalendarView.day,
+                      CalendarView.schedule,
+                      CalendarView.month,
+                      CalendarView.week
+                    ],
+                    showNavigationArrow: true,
+                    showCurrentTimeIndicator: true,
+                    showTodayButton: true,
                     view: _currentView,
                     dataSource: _getCalendarDataSource(_appointments),
                     timeSlotViewSettings: const TimeSlotViewSettings(
