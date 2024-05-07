@@ -1,5 +1,6 @@
 import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/themes/theme.dart';
+import 'package:facultysupportdesk/views/activities_view.dart';
 import 'package:facultysupportdesk/views/auth_view.dart';
 import 'package:facultysupportdesk/views/calendar_view.dart';
 import 'package:facultysupportdesk/views/history_view.dart';
@@ -33,7 +34,8 @@ class App extends StatelessWidget {
         '/auth': (context) => const AuthView(),
         '/main': (context) => const MainView(),
         '/history': (context) => const HistoryView(),
-        '/calendar': (context) => const CalendarView(),
+        '/calendar': (context) => const CalendarOfActivitiesView(),
+        '/activities': (context) => const ActivitiesView(),
       },
     );
   }

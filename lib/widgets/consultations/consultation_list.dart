@@ -6,11 +6,13 @@ class ConsultationList extends StatelessWidget {
   const ConsultationList({
     super.key,
     required this.onUpdateConsultationList,
-    required this.consultations
+    required this.consultations,
+    required this.isPending
   });
 
   final void Function() onUpdateConsultationList;
   final List<ConsultationRequest> consultations;
+  final bool isPending;
 
 
   @override
@@ -19,6 +21,7 @@ class ConsultationList extends StatelessWidget {
       itemCount: consultations.length,
       itemBuilder: (ctx, index) =>
         ConsultationItem(
+          isPending: isPending,
           consultation: consultations[index],
           onUpdateConsultationList: onUpdateConsultationList
         )

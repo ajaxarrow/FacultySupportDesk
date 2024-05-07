@@ -12,6 +12,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<ConsultationRequest> _consultations = [];
+  
 
   Future<void> fetchConsultations() async {
     _consultations.clear();
@@ -20,9 +21,10 @@ class _MainViewState extends State<MainView> {
 
   void _refreshList(){
     setState(() {
-
+    
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class _MainViewState extends State<MainView> {
 
             if (_consultations.isNotEmpty) {
               mainContent = ConsultationList(
+                isPending: true,
                 onUpdateConsultationList: _refreshList,
                 consultations: _consultations
               );
@@ -67,12 +70,12 @@ class _MainViewState extends State<MainView> {
               children: [
                 const SizedBox(height:  10),
                 _consultations.isNotEmpty ? const Padding(
-                  padding: EdgeInsets.only(left:  15, top:  20, bottom:  5),
+                  padding: EdgeInsets.only(left:  15,  bottom:  5),
                   child: Text(
                     'Pending Consultations',
                     style: TextStyle(
                         fontWeight: FontWeight.w800,
-                        fontSize:  23
+                        fontSize:  18
                     ),
                   ),
                 ) : const SizedBox.shrink(),
@@ -82,34 +85,28 @@ class _MainViewState extends State<MainView> {
           }
 
           return MainLayout(
+            title: 'Consultation Requests',
             index: 0,
-            content: RefreshIndicator(
-              onRefresh: () async{
-                await fetchConsultations();
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  duration: Duration(seconds: 2),
-                  content: Text("Consultation Requests List Updated"),
-                ));
-              },
-              child: body,
+            content: SizedBox(
+              width: 1275,
+              height: double.infinity,
+              child: RefreshIndicator(
+                onRefresh: () async{
+                  await fetchConsultations();
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text("Consultation Requests List Updated"),
+                  ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: body,
+                ),
+                ),
             ),
           );
 
-          // return Scaffold(
-          //   appBar: AppBar(
-          //     automaticallyImplyLeading: false,
-          //     title: const Text(
-          //       'logs.',
-          //       style: TextStyle(
-          //           fontWeight: FontWeight.w900,
-          //           fontSize:  24
-          //       ),
-          //     ),
-          //     centerTitle: true,
-          //   ),
-          //   body: body,
-          // );
         }
     );
 

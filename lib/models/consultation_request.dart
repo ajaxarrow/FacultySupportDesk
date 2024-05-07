@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facultysupportdesk/models/activity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'mixins/display_mixin.dart';
@@ -57,6 +58,16 @@ class ConsultationRequest with DisplayMixin{
         'facultyComment': facultyComment,
         'statusUpdateDate': timestamp
       });
+
+      if(status == 'Approved'){
+       await Activity(
+         activityTitle: requestTitle,
+         activityDescription: requestDescription,
+         timeStart: proposedTimeStart,
+         timeEnd: proposedTimeEnd,
+        ).addActivity();
+      }
+
     } on FirebaseException catch(e){
       showError(
           errorMessage: e.message!,
@@ -72,6 +83,14 @@ class ConsultationRequest with DisplayMixin{
     return allConsultationRequests;
   }
 
+  Future<ConsultationRequest> getConsultationRequestByID() async {
+    QuerySnapshot querySnapshot =  await consultationRequests
+        .where('id', isEqualTo: id)
+        .get();
+    final result = querySnapshot.docs.map((doc) => ConsultationRequest.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    return result[0];
+  }
+
   Future <List<ConsultationRequest>> getConsultationRequestsByStatus() async {
     QuerySnapshot querySnapshot =  await consultationRequests
         .where('status', isEqualTo: 'Pending')
@@ -80,5 +99,19 @@ class ConsultationRequest with DisplayMixin{
     final allConsultationRequests = querySnapshot.docs.map((doc) => ConsultationRequest.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
     return allConsultationRequests;
   }
+
+  Future<List<ConsultationRequest>> getConsultationRequestsByDone() async {
+    QuerySnapshot querySnapshot = await consultationRequests
+        .where('status', whereIn: ['Approved', 'Declined'])
+        .where('facultyID', isEqualTo: _firebase.currentUser?.uid)
+        .get();
+
+    final allConsultationRequests = querySnapshot.docs.map((doc) =>
+        ConsultationRequest.fromMap(
+            doc.data() as Map<String, dynamic>, doc.id)).toList();
+
+    return allConsultationRequests;
+  }
+
 
 }
