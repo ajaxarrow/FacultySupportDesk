@@ -24,6 +24,7 @@ class ActivityDialogForm extends StatefulWidget {
 }
 
 class _ActivityDialogFormState extends State<ActivityDialogForm> {
+  bool isLoading = false;
   final _form = GlobalKey<FormState>();
   final activityTitleController = TextEditingController();
   final activityDescriptionController = TextEditingController();
@@ -107,6 +108,9 @@ class _ActivityDialogFormState extends State<ActivityDialogForm> {
   }
 
   void submitActivity(){
+    setState(() {
+      isLoading = true;
+    });
     final isValid = _form.currentState!.validate();
     if(!isValid){
       return;
@@ -132,6 +136,9 @@ class _ActivityDialogFormState extends State<ActivityDialogForm> {
         )
       );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -140,7 +147,12 @@ class _ActivityDialogFormState extends State<ActivityDialogForm> {
       padding: const EdgeInsets.all(20),
       child: SizedBox(
         width: 400,
-        child: Form(
+        child: isLoading ? const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 70),
+            child: CircularProgressIndicator(),
+          ),
+        ) :  Form(
           key: _form,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

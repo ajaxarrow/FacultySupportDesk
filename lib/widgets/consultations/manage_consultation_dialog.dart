@@ -1,7 +1,10 @@
+import 'package:facultysupportdesk/main.dart';
+import 'package:facultysupportdesk/models/app_user.dart';
 import 'package:facultysupportdesk/models/consultation_request.dart';
+import 'package:facultysupportdesk/services/mail_sender.dart';
 import 'package:flutter/material.dart';
 
-class ManageConsultationDialog extends StatelessWidget {
+class ManageConsultationDialog extends StatefulWidget {
   const ManageConsultationDialog({
     super.key,
     required this.consultation,
@@ -12,19 +15,42 @@ class ManageConsultationDialog extends StatelessWidget {
   final Function() onUpdateConsultationList;
 
   @override
+  State<ManageConsultationDialog> createState() => _ManageConsultationDialogState();
+}
+
+class _ManageConsultationDialogState extends State<ManageConsultationDialog> {
+  bool isLoading = false;
+  @override
   Widget build(BuildContext context) {
     final facultyCommentController = TextEditingController();
     final form = GlobalKey<FormState>();
 
-    void save(ConsultationRequest consultationRequest){
+    Future<void> sendEmail(ConsultationRequest consultation)async {
+      AppUser student = await AppUser().getUserById(consultation.studentID!);
+      AppUser faculty = await AppUser().getUserById(consultation.facultyID!);
+      await MailSender(
+          consultation: consultation,
+          faculty: faculty,
+          student: student
+      ).sendEmail();
+    }
+
+    Future<void> save(ConsultationRequest consultationRequest) async{
+      setState(() {
+        isLoading = true;
+      });
       final isValid = form.currentState!.validate();
       if(!isValid){
         return;
       }
       form.currentState!.save();
       consultationRequest.manageConsultationRequest();
+      await sendEmail(consultationRequest);
+      setState(() {
+        isLoading = false;
+      });
       Navigator.pop(context);
-      onUpdateConsultationList();
+      widget.onUpdateConsultationList();
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
@@ -32,11 +58,20 @@ class ManageConsultationDialog extends StatelessWidget {
       ));
     }
 
+
+
+
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: SizedBox(
         width: 300,
-        child: Form(
+        child: isLoading ? const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 50),
+            child: CircularProgressIndicator(),
+          ),
+        ) : Form(
           key: form,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,11 +120,13 @@ class ManageConsultationDialog extends StatelessWidget {
                         ),
                         onPressed: (){
                           save(ConsultationRequest(
-                              id: consultation.id,
-                              requestTitle: consultation.requestTitle,
-                              requestDescription: consultation.requestDescription,
-                              proposedTimeStart: consultation.proposedTimeStart,
-                              proposedTimeEnd: consultation.proposedTimeEnd,
+                              id: widget.consultation.id,
+                              studentID: widget.consultation.studentID,
+                              facultyID: widget.consultation.facultyID,
+                              requestTitle: widget.consultation.requestTitle,
+                              requestDescription: widget.consultation.requestDescription,
+                              proposedTimeStart: widget.consultation.proposedTimeStart,
+                              proposedTimeEnd: widget.consultation.proposedTimeEnd,
                               facultyComment: facultyCommentController.text,
                               status: 'Declined'
                           ));
@@ -111,11 +148,13 @@ class ManageConsultationDialog extends StatelessWidget {
                         ),
                         onPressed: (){
                           save(ConsultationRequest(
-                              id: consultation.id,
-                              requestTitle: consultation.requestTitle,
-                              requestDescription: consultation.requestDescription,
-                              proposedTimeStart: consultation.proposedTimeStart,
-                              proposedTimeEnd: consultation.proposedTimeEnd,
+                              id: widget.consultation.id,
+                              studentID: widget.consultation.studentID,
+                              facultyID: widget.consultation.facultyID,
+                              requestTitle: widget.consultation.requestTitle,
+                              requestDescription: widget.consultation.requestDescription,
+                              proposedTimeStart: widget.consultation.proposedTimeStart,
+                              proposedTimeEnd: widget.consultation.proposedTimeEnd,
                               facultyComment: facultyCommentController.text,
                               status: 'Approved'
                           ));
