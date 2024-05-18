@@ -14,12 +14,14 @@ class AppUser with DisplayMixin{
     this.password,
     this.context,
     this.uid,
+    this.role
   });
 
   final String? uid;
   final String? name;
   final String? email;
   final String? password;
+  final String? role;
   final BuildContext? context;
 
   factory AppUser.fromMap(Map<String, dynamic> data, id) {
@@ -43,6 +45,7 @@ class AppUser with DisplayMixin{
         'id': userCredential.user!.uid,
         'name': name,
         'email': email,
+        'role': role
       });
 
     } on FirebaseAuthException catch(e){
@@ -57,10 +60,30 @@ class AppUser with DisplayMixin{
 
   Future<void> login() async {
     try{
-      await _firebase.signInWithEmailAndPassword(
-          email: email!,
-          password: password!
-      );
+
+      final user = await getUserByEmail(email!);
+
+      if (user.role == 'faculty'){
+        await _firebase.signInWithEmailAndPassword(
+            email: email!,
+            password: password!
+        );
+      } else if (user.role == 'registrar'){
+        await _firebase.signInWithEmailAndPassword(
+            email: email!,
+            password: password!
+        );
+      } else {
+        showError(
+          errorMessage: 'This account is prohibited for this module',
+          errorTitle: 'Authentication Error'
+        );
+      }
+
+
+
+
+
     } on FirebaseAuthException catch(e){
       showError(
           errorMessage: e.message!,
@@ -73,6 +96,17 @@ class AppUser with DisplayMixin{
   Future<AppUser> getUserById(String id) async {
     QuerySnapshot querySnapshot =  await users
         .where('id', isEqualTo: id)
+        .get();
+
+    final result = querySnapshot.docs.map((doc) =>
+        AppUser.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    return result[0];
+  }
+
+
+  Future<AppUser> getUserByEmail(String email) async {
+    QuerySnapshot querySnapshot =  await users
+        .where('email', isEqualTo: email)
         .get();
 
     final result = querySnapshot.docs.map((doc) =>

@@ -15,6 +15,8 @@ class ActivityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLarge = MediaQuery.of(context).size.width > 900;
+
     void showActivityFormDialog() {
       showDialog(
         context: context,
@@ -54,7 +56,7 @@ class ActivityItem extends StatelessWidget {
                       )
                   ),
                   const Spacer(),
-                  Text('Proposed Time: ${formatTimestamp(activity.timeStart!)} - ${formatTimestamp(activity.timeEnd!)}'),
+                  isLarge ? Text('Proposed Time: ${formatTimestamp(activity.timeStart!)} - ${formatTimestamp(activity.timeEnd!)}') : const SizedBox.shrink(),
                 ],
               ),
               const SizedBox(
@@ -64,12 +66,12 @@ class ActivityItem extends StatelessWidget {
                 children: [
                   Text(activity.activityDescription!),
                   const Spacer(),
-                  TextButton.icon(
+                  isLarge ? TextButton.icon(
                       onPressed: showActivityFormDialog,
                       label: const Text('Edit'),
                       icon: const Icon(Icons.edit,
                           size: 16)
-                  )
+                  ) : const SizedBox.shrink(),
                 ],
               )
             ],
