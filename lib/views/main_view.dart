@@ -88,7 +88,7 @@ class _MainViewState extends State<MainView> {
             title: 'Consultation Requests',
             index: 0,
             content: SizedBox(
-              width: 1275,
+              width: double.infinity,
               height: double.infinity,
               child: RefreshIndicator(
                 onRefresh: () async{

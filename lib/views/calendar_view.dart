@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarOfActivitiesView extends StatefulWidget {
-  const CalendarOfActivitiesView({Key? key});
+  const CalendarOfActivitiesView({super.key});
 
   @override
   State<CalendarOfActivitiesView> createState() =>

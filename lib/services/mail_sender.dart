@@ -1,5 +1,7 @@
+import 'package:emailjs/emailjs.dart';
 import 'package:facultysupportdesk/models/app_user.dart';
 import 'package:facultysupportdesk/models/consultation_request.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -18,15 +20,46 @@ class MailSender{
   // final smtpServer = gmail(dotenv.env['USERNAME']!, dotenv.env['PASSWORD']!);
   final smtpServer = SmtpServer(
     'smtp.titan.email',
-    username: dotenv.env['USERNAME']!,
-    password: dotenv.env['PASSWORD']!,
+    // username: dotenv.env['USERNAME']!,
+    // password: dotenv.env['PASSWORD']!,
+    username: 'km.dahay@rentermade.com',
+    password: 'Ro[-(.Fg= xyuc4'
   );
+
+
   Future<void> sendEmail() async {
-    final message = Message()
-      ..from = Address(dotenv.env['USERNAME']!, faculty.name)
-      ..recipients.add(student.email)
-      ..subject = 'Consultation Request Feedback'
-      ..html = '''
+    if(kIsWeb){
+      Map<String, dynamic> templateParams = {
+        'student': student.name,
+        'faculty': faculty.name,
+        'status': consultation.status?.toLowerCase(),
+        'consultationTitle': consultation.requestTitle,
+        'comment': consultation.facultyComment,
+        'recipient': student.email,
+        'facultyEmail': faculty.email
+      };
+
+      try {
+        await EmailJS.send(
+          'service_ozim6ds',
+          'template_vssupfg',
+          templateParams,
+          const Options(
+            publicKey: 'fbwRlnX5-YoQvsEKo',
+            privateKey: 'b1ASnBlYV0LrExgxYQmkY',
+          ),
+        );
+        print('SUCCESS!');
+      } catch (error) {
+        print(error.toString());
+      }
+    } else {
+      final message = Message()
+      // ..from = Address(dotenv.env['USERNAME']!, faculty.name)
+        ..from = Address('km.dahay@rentermade.com', faculty.name)
+        ..recipients.add(student.email)
+        ..subject = 'Consultation Request Feedback'
+        ..html = '''
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -77,6 +110,10 @@ class MailSender{
               <p>${consultation.facultyComment}</p>
             </div>
             <p>Thank you!</p>
+            <br/>
+            <p>Sincerely,</p>
+            <p>${faculty.name}</p>
+            <p>${faculty.email}</p>
           </div>
         </body>
         </html>
@@ -92,6 +129,7 @@ class MailSender{
           // print('Problem: ${p.code}: ${p.msg}');
         }
       }
+    }
 
   }
 
