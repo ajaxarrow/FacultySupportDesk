@@ -30,6 +30,7 @@ class AppUser with DisplayMixin{
       name: data['name'],
       email: data['email'],
       password: data['password'],
+      role: data['role']
     );
   }
 
@@ -47,7 +48,6 @@ class AppUser with DisplayMixin{
         'email': email,
         'role': role
       });
-
     } on FirebaseAuthException catch(e){
       showError(
           errorMessage: e.message!,
@@ -60,30 +60,26 @@ class AppUser with DisplayMixin{
 
   Future<void> login() async {
     try{
-
       final user = await getUserByEmail(email!);
-
       if (user.role == 'faculty'){
+        print('faculty bitch');
         await _firebase.signInWithEmailAndPassword(
             email: email!,
             password: password!
         );
       } else if (user.role == 'registrar'){
+        print('registrar bitch');
         await _firebase.signInWithEmailAndPassword(
             email: email!,
             password: password!
         );
-      } else {
+      } else if (user.role == 'student') {
+        print(user.role);
         showError(
           errorMessage: 'This account is prohibited for this module',
           errorTitle: 'Authentication Error'
         );
       }
-
-
-
-
-
     } on FirebaseAuthException catch(e){
       showError(
           errorMessage: e.message!,
@@ -111,7 +107,13 @@ class AppUser with DisplayMixin{
 
     final result = querySnapshot.docs.map((doc) =>
         AppUser.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
-    return result[0];
+
+    if (result.isEmpty){
+      showError(errorMessage: "User doesn't exist", errorTitle: 'Authentication Error!');
+      return AppUser();
+    } else {
+      return result[0];
+    }
   }
 
 
