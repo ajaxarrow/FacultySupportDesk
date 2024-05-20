@@ -110,10 +110,12 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
         }
 
         return MainLayout(
+          role: Role.faculty,
           title: 'Calendar of Activities',
           index: 2,
           content: SizedBox(
-            width: 1275,
+            width: double.infinity,
+            height: double.infinity,
             child: Scaffold(body: body),
           ),
         );

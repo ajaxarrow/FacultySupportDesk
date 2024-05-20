@@ -1,7 +1,7 @@
 import 'package:facultysupportdesk/models/app_user.dart';
 import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/utils/format_date.dart';
-import 'package:facultysupportdesk/views/consultation_details_view.dart';
+import 'package:facultysupportdesk/views/faculty/consultation_details_view.dart';
 import 'package:facultysupportdesk/widgets/consultations/manage_consultation_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

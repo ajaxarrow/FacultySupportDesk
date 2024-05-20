@@ -38,10 +38,11 @@ class ConsultationDetailsView extends StatelessWidget {
     }
 
     return MainLayout(
+      role: Role.faculty,
       title: 'Consultation Request Details',
       index: isPending ? 0 : 1,
       content: SizedBox(
-        width: 1275,
+        width: double.infinity,
         height: double.infinity,
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 35),

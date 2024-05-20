@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facultysupportdesk/models/mixins/display_mixin.dart';
-import 'package:facultysupportdesk/utils/format_date.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -83,8 +81,6 @@ class Activity with DisplayMixin{
   }
 
   Future<void> addActivity() async {
-
-
     try {
       await activities.add({
         'activityTitle': activityTitle,

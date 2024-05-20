@@ -39,16 +39,16 @@ class _ActivitiesViewState extends State<ActivitiesView> {
 
   void showActivityFormDialog() {
     showDialog(
-        context: context,
-        builder: (ctx) =>
-            SimpleDialog(
-              children: [
-                ActivityDialogForm(
-                  mode: Mode.create,
-                  onAddActivity: _refreshList,
-                )
-              ],
-            )
+      context: context,
+      builder: (ctx) =>
+          SimpleDialog(
+            children: [
+              ActivityDialogForm(
+                mode: Mode.create,
+                onAddActivity: _refreshList,
+              )
+            ],
+          )
     );
   }
 
@@ -111,10 +111,11 @@ class _ActivitiesViewState extends State<ActivitiesView> {
           }
 
           return MainLayout(
+            role: Role.faculty,
             title: 'Your Activities',
             index: 3,
             content: SizedBox(
-              width: 1275,
+              width: double.infinity,
               height: double.infinity,
               child: RefreshIndicator(
                 onRefresh: () async{

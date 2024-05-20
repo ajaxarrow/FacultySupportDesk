@@ -4,56 +4,119 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
+enum Role{faculty, registrar, admin}
+
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key, required this.index, required this.content, required this.title});
+  const MainLayout({super.key, required this.index, required this.content, required this.title, required this.role});
   final int index;
   final Widget content;
   final String title;
+  final Role role;
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
 }
 
-const _navBarItems = [
-  BottomNavigationBarItem(
-    icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
-    activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
-    label: 'Consultation Requests',
-  ),
-  BottomNavigationBarItem(
-    icon: PhosphorIcon(PhosphorIconsRegular.hourglass),
-    activeIcon: PhosphorIcon(PhosphorIconsFill.hourglass),
-    label: 'History',
-  ),
-  BottomNavigationBarItem(
-    icon: PhosphorIcon(PhosphorIconsRegular.calendar),
-    activeIcon: PhosphorIcon(PhosphorIconsFill.calendar),
-    label: 'Calendar View',
-  ),
-  BottomNavigationBarItem(
-    icon: PhosphorIcon(PhosphorIconsRegular.listChecks),
-    activeIcon: PhosphorIcon(PhosphorIconsFill.listChecks),
-    label: 'Activities',
-  ),
-  BottomNavigationBarItem(
-    icon: Icon(Icons.logout), // Logout icon
-    label: 'Logout',
-  ),
-];
-
-
-var _navBarItemLinks = [
-  '/main',
-  '/history',
-  '/calendar',
-  '/activities',
-  '/logout'
-];
-
-
 class _MainLayoutState extends State<MainLayout> {
   int _selectedIndex = 0;
   String facultyName = 'User';
+
+  List<BottomNavigationBarItem> get _navBarItems {
+    if (widget.role == Role.faculty) {
+      return [
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
+          label: 'Consultation Requests',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.hourglass),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.hourglass),
+          label: 'Consultation History',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.calendar),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.calendar),
+          label: 'Calendar View',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.listChecks),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.listChecks),
+          label: 'Activities',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.clock),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.clock),
+          label: 'Schedules',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.hourglassMedium),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.hourglassMedium),
+          label: 'Schedule History',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout), // Logout icon
+          label: 'Logout',
+        ),
+      ];
+    } else if (widget.role == Role.registrar) {
+      return [
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
+          label: 'Academic Year',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout), // Logout icon
+          label: 'Logout',
+        ),
+      ];
+    } else if (widget.role == Role.admin) {
+      return [
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
+          label: 'Academic Year',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.users),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.users),
+          label: 'Users',
+        ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.logout), // Logout icon
+          label: 'Logout',
+        ),
+      ];
+    }
+    return [];
+  }
+
+  List<String> get _navBarItemLinks {
+    if (widget.role == Role.faculty) {
+      return [
+        '/main',
+        '/history',
+        '/calendar',
+        '/activities',
+        '/schedule',
+        '/schedule-history',
+        '/logout',
+      ];
+    } else if (widget.role == Role.registrar) {
+      return [
+        '/registrar-main',
+        '/logout',
+      ];
+    } else if (widget.role == Role.admin) {
+      return [
+        '/registrar-main',
+        '/users',
+        '/logout',
+      ];
+    }
+    return [];
+  }
 
   @override
   void initState() {
@@ -73,6 +136,7 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     final railWidth = width * 0.20;
     final mainContainerWidth = width * 0.78;
     final bool isSmallScreen = width < 600;
@@ -100,49 +164,50 @@ class _MainLayoutState extends State<MainLayout> {
           })
           : null,
       body: SizedBox(
-        height: double.infinity,
+        height: height,
         width: width,
         child: Row(
           children: <Widget>[
             if (!isSmallScreen)
               SizedBox(
+                height: height,
                 width: railWidth,
                 child: NavigationRail(
-                  selectedIndex: _selectedIndex,
-                  onDestinationSelected: (int index) {
-                    if (index == _navBarItems.length - 1) {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pushReplacementNamed('/redirect');
-                    } else {
-                      Navigator.of(context).pushReplacementNamed(_navBarItemLinks[index]);
-                    }
-                  },
-                  extended: isLargeScreen,
-                  leading: SizedBox(
-                    height: 100, // Adjust the height as needed
-                    child: Center(
-                      child: isLargeScreen ? const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          PhosphorIcon(PhosphorIconsFill.chalkboardTeacher, size: 26), // Example icon
-                          SizedBox(width: 8), // Space between icon and text
-                          Text(
-                            'Faculty Support Desk',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ) : const PhosphorIcon(PhosphorIconsDuotone.chalkboardTeacher, size: 50),
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: (int index) {
+                      if (index == _navBarItems.length - 1) {
+                        FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacementNamed('/redirect');
+                      } else {
+                        Navigator.of(context).pushReplacementNamed(_navBarItemLinks[index]);
+                      }
+                    },
+                    extended: isLargeScreen,
+                    leading: SizedBox(
+                      height: 100, // Adjust the height as needed
+                      child: Center(
+                        child: isLargeScreen ? const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            PhosphorIcon(PhosphorIconsFill.chalkboardTeacher, size: 26), // Example icon
+                            SizedBox(width: 8), // Space between icon and text
+                            Text(
+                              'Faculty Support Desk',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ) : const PhosphorIcon(PhosphorIconsDuotone.chalkboardTeacher, size: 50),
+                      ),
                     ),
+                    destinations: _navBarItems
+                        .map((item) => NavigationRailDestination(
+                        icon: item.icon,
+                        selectedIcon: item.activeIcon,
+                        label: Text(
+                          item.label!,
+                        )))
+                        .toList(),
                   ),
-                  destinations: _navBarItems
-                      .map((item) => NavigationRailDestination(
-                      icon: item.icon,
-                      selectedIcon: item.activeIcon,
-                      label: Text(
-                        item.label!,
-                      )))
-                      .toList(),
-                ),
               ),
             const VerticalDivider(thickness: 1, width: 1),
             // This is the main content.
@@ -164,7 +229,7 @@ class _MainLayoutState extends State<MainLayout> {
                             vertical: 20
                         ),
                         child: SizedBox(
-                          width: 1225,
+                          width: isSmallScreen ? width * 0.99 : mainContainerWidth,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

@@ -39,22 +39,28 @@ class _AuthViewState extends State<AuthView> {
   void submit() async{
     final isValid = _form.currentState!.validate();
 
-    AppUser user = AppUser(
-        name: nameController.text,
-        password: passwordController.text,
-        email: emailController.text,
-        role: userRole,
-        context: context
-    );
 
     if(!isValid){
       return;
     }
     _form.currentState!.save();
     if(isRegister){
-      await user.register();
+      await AppUser(
+        name: nameController.text,
+        password: passwordController.text,
+        email: emailController.text,
+        role: userRole,
+        context: context,
+        isActive: true
+      ).register();
     } else {
-      await user.login();
+      await AppUser(
+          name: nameController.text,
+          password: passwordController.text,
+          email: emailController.text,
+          role: userRole,
+          context: context
+      ).login();
     }
   }
 

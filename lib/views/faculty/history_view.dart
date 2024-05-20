@@ -3,28 +3,27 @@ import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/widgets/consultations/consultation_list.dart';
 import 'package:flutter/material.dart';
 
-class MainView extends StatefulWidget {
-  const MainView({super.key});
+class HistoryView extends StatefulWidget {
+  const HistoryView({super.key});
 
   @override
-  State<MainView> createState() => _MainViewState();
+  State<HistoryView> createState() => _HistoryViewState();
 }
 
-class _MainViewState extends State<MainView> {
+class _HistoryViewState extends State<HistoryView> {
   List<ConsultationRequest> _consultations = [];
-  
+
 
   Future<void> fetchConsultations() async {
     _consultations.clear();
-    _consultations = await ConsultationRequest().getConsultationRequestsByStatus();
+    _consultations = await ConsultationRequest().getConsultationRequestsByDone();
   }
 
   void _refreshList(){
     setState(() {
-    
+
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +50,7 @@ class _MainViewState extends State<MainView> {
                   ),
                   SizedBox(height:  5),
                   Text(
-                      'There are no pending consultations.'
+                      'There are no approved or declined consultations.'
                   )
                 ],
               ),
@@ -59,9 +58,9 @@ class _MainViewState extends State<MainView> {
 
             if (_consultations.isNotEmpty) {
               mainContent = ConsultationList(
-                isPending: true,
-                onUpdateConsultationList: _refreshList,
-                consultations: _consultations
+                  isPending: false,
+                  onUpdateConsultationList: _refreshList,
+                  consultations: _consultations
               );
             }
 
@@ -72,7 +71,7 @@ class _MainViewState extends State<MainView> {
                 _consultations.isNotEmpty ? const Padding(
                   padding: EdgeInsets.only(left:  15,  bottom:  5),
                   child: Text(
-                    'Pending Consultations',
+                    'Consultation History',
                     style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize:  18
@@ -85,8 +84,9 @@ class _MainViewState extends State<MainView> {
           }
 
           return MainLayout(
-            title: 'Consultation Requests',
-            index: 0,
+            role: Role.faculty,
+            title: 'Consultation History',
+            index: 1,
             content: SizedBox(
               width: double.infinity,
               height: double.infinity,
@@ -96,19 +96,18 @@ class _MainViewState extends State<MainView> {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     duration: Duration(seconds: 2),
-                    content: Text("Consultation Requests List Updated"),
+                    content: Text("Consultation History List Updated"),
                   ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: body,
                 ),
-                ),
+              ),
             ),
           );
 
         }
     );
-
   }
 }

@@ -4,6 +4,9 @@ mixin DisplayMixin{
   BuildContext? context;
 
   void showError({required String errorMessage, required String errorTitle}){
+    print('showError called'); // Debug print
+    print('Current context: $context'); // Debug print
+
     showDialog(
         context: context!,
         builder: (ctx) => AlertDialog(
