@@ -1,0 +1,28 @@
+import 'package:facultysupportdesk/widgets/users/user_item.dart';
+import 'package:flutter/material.dart';
+import '../../models/app_user.dart';
+
+class UserList extends StatelessWidget {
+  const UserList({
+    super.key,
+    required this.onRemoveUser,
+    required this.users,
+    required this.onUpdateUserList
+  });
+
+  final Function() onRemoveUser;
+  final List<AppUser> users;
+  final Function() onUpdateUserList;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (ctx, index) =>
+            UserItem(
+                  user: users[index],
+                  onUpdateUserList: onUpdateUserList,
+                )
+            );
+  }
+}
