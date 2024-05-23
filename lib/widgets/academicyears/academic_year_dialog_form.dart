@@ -25,6 +25,7 @@ class _AcademicYearDialogFormState extends State<AcademicYearDialogForm> {
   final _form = GlobalKey<FormState>();
   final yearStartController = TextEditingController();
   final yearEndController = TextEditingController();
+  String selectedSemester = '1st Semester';
   bool isDefault = false;
 
   @override
@@ -36,6 +37,7 @@ class _AcademicYearDialogFormState extends State<AcademicYearDialogForm> {
       yearEndController.text = widget.academicYear!.yearEnd!;
       setState(() {
         isDefault = widget.academicYear!.isDefault!;
+        selectedSemester = widget.academicYear!.semester!;
       });
     }
   }
@@ -79,14 +81,16 @@ class _AcademicYearDialogFormState extends State<AcademicYearDialogForm> {
           yearStart: yearStartController.text,
           yearEnd: yearEndController.text,
           isDefault: isDefault,
+          semester: selectedSemester,
         ));
       } else {
         updateAcademicYear(AcademicYear(
-            context: context,
-            yearStart: yearStartController.text,
-            yearEnd: yearEndController.text,
-            isDefault: isDefault,
-            id: widget.academicYear!.id!
+          context: context,
+          yearStart: yearStartController.text,
+          yearEnd: yearEndController.text,
+          isDefault: isDefault,
+          id: widget.academicYear!.id!,
+          semester: selectedSemester,
         ));
       }
     }
@@ -156,6 +160,31 @@ class _AcademicYearDialogFormState extends State<AcademicYearDialogForm> {
                     prefixIcon: Icon(Icons.comment),
                     hintText: 'Enter End Year'
                 ),
+              ),
+              const SizedBox(height: 25),
+              const Text('Semester:', style: TextStyle(fontWeight: FontWeight.w500)),
+              const SizedBox(height: 8),
+              DropdownButton(
+                  value: selectedSemester,
+                  items: const [
+                    DropdownMenuItem(
+                        value: '1st Semester',
+                        child: Text('1st Semester')
+                    ),
+                    DropdownMenuItem(
+                        value: '2nd Semester',
+                        child: Text('2nd Semester')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Midyear',
+                        child: Text('Midyear')
+                    )
+                  ],
+                  onChanged: (value){
+                    setState(() {
+                      selectedSemester = value!;
+                    });
+                  }
               ),
               const SizedBox(height: 25),
               Row(

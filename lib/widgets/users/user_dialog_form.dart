@@ -179,7 +179,7 @@ class _UserDialogFormState extends State<UserDialogForm> {
                           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                         ),
                       ) : const SizedBox.shrink(),
-                      isRegister? CustomRadioButtonWidget(
+                      isRegister && widget.user!.role! != 'student' ? CustomRadioButtonWidget(
                           onValueChanged: onRadioValueChanged,
                           initialValue: selectedValue) : const SizedBox.shrink(),
                       isRegister ? const SizedBox(

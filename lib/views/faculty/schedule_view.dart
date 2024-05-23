@@ -4,6 +4,9 @@ import 'package:facultysupportdesk/widgets/schedules/schedule_form_dialog.dart';
 import 'package:facultysupportdesk/widgets/schedules/schedule_list.dart';
 import 'package:flutter/material.dart';
 
+import '../../route_guards.dart';
+
+
 class ScheduleView extends StatefulWidget {
   const ScheduleView({super.key});
 
@@ -17,6 +20,13 @@ class _ScheduleViewState extends State<ScheduleView> {
   Future<void> fetchSchedules() async {
     _schedules.clear();
     _schedules = await Schedule().getScheduleByFacultyID();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('faculty', context);
   }
 
   void _refreshList(){

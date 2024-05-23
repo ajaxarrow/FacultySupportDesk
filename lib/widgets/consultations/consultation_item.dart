@@ -26,6 +26,8 @@ class ConsultationItem extends StatefulWidget {
 class _ConsultationItemState extends State<ConsultationItem> {
   String studentName = 'Student Name';
   String studentEmail = 'email@example.com';
+  String facultyName = 'Faculty Name';
+  String facultyEmail = 'faculty@example.com';
 
 
   @override
@@ -38,14 +40,21 @@ class _ConsultationItemState extends State<ConsultationItem> {
         studentEmail = value.email!;
       });
     });
+    AppUser().getUserById(widget.consultation!.facultyID!).then((value){
+      setState(() {
+        facultyName = value.name!;
+        facultyEmail = value.email!;
+      });
+    });
   }
 
   void navigateToConsultationDetails(BuildContext context){
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).push(
       MaterialPageRoute(builder: (context){
        return ConsultationDetailsView(
          isPending: widget.isPending,
          consultation: widget.consultation,
+         faculty: AppUser(email: facultyEmail, name: facultyName),
          student: AppUser(email: studentEmail, name: studentName));
       },)
     );

@@ -1,13 +1,10 @@
 import 'package:facultysupportdesk/models/app_user.dart';
-import 'package:facultysupportdesk/services/auth_service.dart';
+import 'package:facultysupportdesk/route_guards.dart';
 import 'package:facultysupportdesk/themes/colors.dart';
-import 'package:facultysupportdesk/themes/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import '../widgets/custom_radio_button_widget.dart';
+
 
 class AuthView extends StatefulWidget {
   const AuthView({super.key});
@@ -68,6 +65,13 @@ class _AuthViewState extends State<AuthView> {
     setState(() {
       selectedValue = value;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isNotAuthenticated(context);
   }
 
   @override

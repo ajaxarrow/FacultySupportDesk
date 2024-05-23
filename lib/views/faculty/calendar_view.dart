@@ -3,6 +3,9 @@ import 'package:facultysupportdesk/models/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../route_guards.dart';
+
+
 class CalendarOfActivitiesView extends StatefulWidget {
   const CalendarOfActivitiesView({super.key});
 
@@ -14,11 +17,18 @@ class CalendarOfActivitiesView extends StatefulWidget {
 class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
   List<Appointment> _appointments = <Appointment>[];
 
-  CalendarView _currentView = CalendarView.schedule;
+  CalendarView _currentView = CalendarView.month;
 
   Future<void> fetchAppointments() async {
     _appointments.clear();
     _appointments = await Activity().getAppointmentsByFacultyID();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('faculty', context);
   }
 
   @override
@@ -82,9 +92,10 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SfCalendar(
+                    initialSelectedDate: DateTime.now(),
                     monthViewSettings: const MonthViewSettings(
                       showAgenda: true,
-                      agendaViewHeight: 200
+                      agendaViewHeight: 200,
                     ),
                     allowViewNavigation: true,
                     allowedViews: const <CalendarView>[
@@ -105,6 +116,20 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
                   ),
                 ),
               ),
+              // Expanded(
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(20.0),
+              //     child: SfCalendar(
+              //
+              //       // allowViewNavigation: true,
+              //       showNavigationArrow: true,
+              //       showCurrentTimeIndicator: true,
+              //       view: CalendarView.month,
+              //       dataSource: _getCalendarDataSource(_appointments),
+              //       showDatePickerButton: true,
+              //     ),
+              //   ),
+              // ),
             ],
           );
         }

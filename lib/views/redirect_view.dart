@@ -1,3 +1,4 @@
+
 import 'package:facultysupportdesk/models/app_user.dart';
 import 'package:facultysupportdesk/views/auth_view.dart';
 import 'package:facultysupportdesk/views/faculty/main_view.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'admin/admin_main_view.dart';
+
 
 class RedirectView extends StatelessWidget {
   const RedirectView({super.key});

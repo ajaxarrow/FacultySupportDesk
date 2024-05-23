@@ -1,5 +1,6 @@
 import 'package:facultysupportdesk/models/schedule.dart';
 import 'package:facultysupportdesk/utils/format_date.dart';
+import 'package:facultysupportdesk/views/faculty/schedule_details_view.dart';
 import 'package:facultysupportdesk/widgets/schedules/schedule_form_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -33,50 +34,60 @@ class ScheduleItem extends StatelessWidget {
       );
     }
 
-    return Card(
-      margin: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 15
-      ),
-      child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 20
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: (){
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context){
+              return ScheduleDetailsView(schedule: schedule);
+            })
+          );
+        },
+        child: Card(
+          margin: const EdgeInsets.symmetric(
+              vertical: 5,
+              horizontal: 15
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 20
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      schedule.title!,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16
-                      )
+                  Row(
+                    children: [
+                      Text(
+                          schedule.title!,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16
+                          )
+                      ),
+                      // isLarge ? Text(schedule.semester!) : const SizedBox.shrink(),
+                    ],
                   ),
-                  const Spacer(),
-                  Text(schedule.semester!)
-                  // isLarge ? Text(schedule.semester!) : const SizedBox.shrink(),
-                ],
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Row(
-                children: [
-                  Text('${formatTimestamptoTime(schedule.timeStart!)} - ${formatTimestamptoTime(schedule.timeEnd!)}'),
-                  const Spacer(),
-                  isLarge ? TextButton.icon(
-                      onPressed: showScheduleFormDialog,
-                      label: const Text('Edit'),
-                      icon: const Icon(Icons.edit,
-                          size: 16)
-                  ) : const SizedBox.shrink(),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    children: [
+                      Text('${formatTimestamptoTime(schedule.timeStart!)} - ${formatTimestamptoTime(schedule.timeEnd!)}'),
+                      const Spacer(),
+                      isLarge ? TextButton.icon(
+                          onPressed: showScheduleFormDialog,
+                          label: const Text('Edit'),
+                          icon: const Icon(Icons.edit,
+                              size: 16)
+                      ) : const SizedBox.shrink(),
+                    ],
+                  )
                 ],
               )
-            ],
-          )
+          ),
+        ),
       ),
     );
   }

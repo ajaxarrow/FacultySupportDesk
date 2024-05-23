@@ -3,6 +3,9 @@ import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/widgets/consultations/consultation_list.dart';
 import 'package:flutter/material.dart';
 
+import '../../route_guards.dart';
+
+
 class MainView extends StatefulWidget {
   const MainView({super.key});
 
@@ -12,7 +15,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   List<ConsultationRequest> _consultations = [];
-  
+
 
   Future<void> fetchConsultations() async {
     _consultations.clear();
@@ -25,6 +28,18 @@ class _MainViewState extends State<MainView> {
     });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('faculty', context);
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

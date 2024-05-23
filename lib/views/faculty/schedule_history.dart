@@ -5,6 +5,8 @@ import 'package:facultysupportdesk/widgets/schedules/schedule_form_dialog.dart';
 import 'package:facultysupportdesk/widgets/schedules/schedule_list.dart';
 import 'package:flutter/material.dart';
 
+import '../../route_guards.dart';
+
 class ScheduleHistory extends StatefulWidget {
   const ScheduleHistory({super.key});
 
@@ -22,25 +24,28 @@ class _ScheduleHistoryState extends State<ScheduleHistory> {
 
   Future<void> fetchSchedules() async {
     _schedules = await Schedule(
-      semester: selectedSemester,
       academicYearID: selectedAcademicYearID,
-    ).getScheduleByFacultyIDSemesterandAY();
+    ).getScheduleByFacultyIDByAY();
   }
 
 
   @override
   void initState() {
+    isAuthenticated('faculty', context);
     // TODO: implement initState
     items.clear();
     AcademicYear().getAcademicYears().then((value){
       selectedAcademicYearID = value[0].id!;
+      fetchSchedules();
       items = value.map((academicYear) {
         return DropdownMenuItem(
           value: academicYear.id,
-          child: Text('${academicYear.yearStart} - ${academicYear.yearEnd}'),
+          child: Text('${academicYear.yearStart} - ${academicYear.yearEnd} (${academicYear.semester})'),
         );
       }).toList();
+      fetchSchedules();
     });
+
   }
 
 
@@ -130,29 +135,6 @@ class _ScheduleHistoryState extends State<ScheduleHistory> {
                       },
                     ),
                     const Spacer(),
-                    const Text('Semester: '),
-                    DropdownButton<String>(
-                      value: selectedSemester,
-                      items: const [
-                        DropdownMenuItem(
-                          value: '1st Semester',
-                          child: Text('1st Semester'),
-                        ),
-                        DropdownMenuItem(
-                          value: '2nd Semester',
-                          child: Text('2nd Semester'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'Midyear',
-                          child: Text('Midyear'),
-                        ),
-                      ],
-                      onChanged: (value) async {
-                        setState(() {
-                          selectedSemester = value!;
-                        });
-                      },
-                    ),
                   ],
                 ),
               ),

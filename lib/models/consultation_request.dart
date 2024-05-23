@@ -19,7 +19,9 @@ class ConsultationRequest with DisplayMixin{
     this.status,
     this.statusUpdateDate,
     this.context,
-    this.facultyComment
+    this.facultyComment,
+    this.createdAt,
+    this.room
   });
 
   final BuildContext? context;
@@ -33,6 +35,8 @@ class ConsultationRequest with DisplayMixin{
   final String? status;
   final Timestamp? statusUpdateDate;
   final String? facultyComment;
+  final Timestamp? createdAt;
+  final String? room;
 
   factory ConsultationRequest.fromMap(Map<String, dynamic> data, id){
     return ConsultationRequest(
@@ -45,7 +49,9 @@ class ConsultationRequest with DisplayMixin{
       proposedTimeEnd: data['proposedTimeEnd'],
       status: data['status'],
       statusUpdateDate: data['statusUpdateDate'],
-      facultyComment: data['facultyComment']
+      facultyComment: data['facultyComment'],
+      createdAt: data['createdAt'],
+      room: data['room']
     );
   }
 
@@ -54,19 +60,13 @@ class ConsultationRequest with DisplayMixin{
     Timestamp timestamp = Timestamp.fromDate(now);
     try{
       await consultationRequests.doc(id).update({
+        'room': room,
         'status': status,
         'facultyComment': facultyComment,
-        'statusUpdateDate': timestamp
+        'statusUpdateDate': timestamp,
+        'createdAt': FieldValue.serverTimestamp()
       });
 
-      if(status == 'Approved'){
-       await Activity(
-         activityTitle: requestTitle,
-         activityDescription: requestDescription,
-         timeStart: proposedTimeStart,
-         timeEnd: proposedTimeEnd,
-        ).addActivity();
-      }
 
     } on FirebaseException catch(e){
       showError(
@@ -83,6 +83,28 @@ class ConsultationRequest with DisplayMixin{
     return allConsultationRequests;
   }
 
+  Future <List<ConsultationRequest>> getAllConsultationRequestsByStatus() async {
+    QuerySnapshot querySnapshot =  await consultationRequests
+        .where('status', isEqualTo: 'Pending')
+        .orderBy('createdAt', descending: true)
+        .get();
+    final allConsultationRequests = querySnapshot.docs.map((doc) => ConsultationRequest.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    return allConsultationRequests;
+  }
+
+  Future<List<ConsultationRequest>> getAllConsultationRequestsByDone() async {
+    QuerySnapshot querySnapshot = await consultationRequests
+        .where('status', whereIn: ['Approved', 'Declined'])
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    final allConsultationRequests = querySnapshot.docs.map((doc) =>
+        ConsultationRequest.fromMap(
+            doc.data() as Map<String, dynamic>, doc.id)).toList();
+
+    return allConsultationRequests;
+  }
+
   Future<ConsultationRequest> getConsultationRequestByID() async {
     QuerySnapshot querySnapshot =  await consultationRequests
         .where('id', isEqualTo: id)
@@ -95,6 +117,7 @@ class ConsultationRequest with DisplayMixin{
     QuerySnapshot querySnapshot =  await consultationRequests
         .where('status', isEqualTo: 'Pending')
         .where('facultyID', isEqualTo: _firebase.currentUser?.uid)
+        .orderBy('createdAt', descending: true)
         .get();
     final allConsultationRequests = querySnapshot.docs.map((doc) => ConsultationRequest.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
     return allConsultationRequests;
@@ -104,6 +127,7 @@ class ConsultationRequest with DisplayMixin{
     QuerySnapshot querySnapshot = await consultationRequests
         .where('status', whereIn: ['Approved', 'Declined'])
         .where('facultyID', isEqualTo: _firebase.currentUser?.uid)
+        .orderBy('createdAt', descending: true)
         .get();
 
     final allConsultationRequests = querySnapshot.docs.map((doc) =>

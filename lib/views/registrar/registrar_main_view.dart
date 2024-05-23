@@ -4,6 +4,8 @@ import 'package:facultysupportdesk/widgets/academicyears/academic_year_list.dart
 import 'package:flutter/material.dart';
 
 import '../../layout/main_layout.dart';
+import '../../route_guards.dart';
+
 
 class RegistrarMainView extends StatefulWidget {
   const RegistrarMainView({super.key});
@@ -24,6 +26,18 @@ class _RegistrarMainViewState extends State<RegistrarMainView> {
     setState(() {
 
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('registrar', context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _removeAcademicYear(String id) async {

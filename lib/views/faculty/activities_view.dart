@@ -3,16 +3,22 @@ import 'package:facultysupportdesk/models/activity.dart';
 import 'package:facultysupportdesk/widgets/activities/activity_dialog_form.dart';
 import 'package:facultysupportdesk/widgets/activities/activity_list.dart';
 import 'package:flutter/material.dart';
+import 'package:facultysupportdesk/route_guards.dart';
+
 
 class ActivitiesView extends StatefulWidget {
   const ActivitiesView({super.key});
 
+
   @override
   State<ActivitiesView> createState() => _ActivitiesViewState();
+
 }
 
 class _ActivitiesViewState extends State<ActivitiesView> {
   List<Activity> _activities = [];
+
+
 
   Future<void> fetchActivities() async {
     _activities.clear();
@@ -50,6 +56,13 @@ class _ActivitiesViewState extends State<ActivitiesView> {
             ],
           )
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('faculty', context);
   }
 
   @override

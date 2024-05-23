@@ -28,7 +28,7 @@ class _ScheduleFormDialogState extends State<ScheduleFormDialog> {
   TimeOfDay timeStart= TimeOfDay.now();
   TimeOfDay timeEnd = TimeOfDay.now();
   final scheduleTitle = TextEditingController();
-  String selectedSemester = '1st Semester';
+
 
   Future<void> _selectTime(TimeOfDay selectedTime, Type type) async {
     final TimeOfDay? pickedTime = await showTimePicker(
@@ -56,9 +56,6 @@ class _ScheduleFormDialogState extends State<ScheduleFormDialog> {
       scheduleTitle.text = widget.schedule!.title!;
       timeStart = convertTimestampToTimeOfDay(widget.schedule!.timeStart!);
       timeEnd = convertTimestampToTimeOfDay(widget.schedule!.timeEnd!);
-      setState(() {
-        selectedSemester = widget.schedule!.semester!;
-      });
     }
   }
 
@@ -93,14 +90,12 @@ class _ScheduleFormDialogState extends State<ScheduleFormDialog> {
     if (widget.mode == Mode.create) {
       addSchedule(Schedule(
         title: scheduleTitle.text,
-        semester: selectedSemester,
         timeStart: convertTimeOfDayToTimeStamp(timeStart),
         timeEnd: convertTimeOfDayToTimeStamp(timeEnd)
       ));
     } else {
       updateSchedule(Schedule(
         title: scheduleTitle.text,
-        semester: selectedSemester,
         timeStart: convertTimeOfDayToTimeStamp(timeStart),
         timeEnd: convertTimeOfDayToTimeStamp(timeEnd),
         id: widget.schedule!.id!
@@ -156,33 +151,8 @@ class _ScheduleFormDialogState extends State<ScheduleFormDialog> {
                 ),
               ),
               const SizedBox(height: 25),
-              const Text('Semester:', style: TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 8),
-              DropdownButton(
-                value: selectedSemester,
-                items: const [
-                  DropdownMenuItem(
-                    value: '1st Semester',
-                    child: Text('1st Semester')
-                  ),
-                  DropdownMenuItem(
-                      value: '2nd Semester',
-                      child: Text('2nd Semester')
-                  ),
-                  DropdownMenuItem(
-                      value: 'Midyear',
-                      child: Text('Midyear')
-                  )
-                ],
-                onChanged: (value){
-                  setState(() {
-                    selectedSemester = value!;
-                  });
-                }
-              ),
-              const SizedBox(height: 25),
               Text('Schedule: (Selected: ${formatTimestamptoTime(convertTimeOfDayToTimeStamp(timeStart))} - ${formatTimestamptoTime(convertTimeOfDayToTimeStamp(timeEnd))})',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
+                  style: const TextStyle(fontWeight: FontWeight.w500)),
               const SizedBox(height: 8),
               Row(
                 children: [

@@ -7,7 +7,7 @@ const RESOURCES = {"assets/AssetManifest.bin": "64b16a976bf1115fea23b89cd8886e95
 "assets/AssetManifest.bin.json": "cb81e2d4553401b4adce797bf4da199b",
 "assets/AssetManifest.json": "f30ae577d05cdeb210c9eb48e506c6ee",
 "assets/FontManifest.json": "18e121ad67a7e0a7bd5098ac6f7a1c5c",
-"assets/fonts/MaterialIcons-Regular.otf": "4eea32af3aaedf9e089b27b1615e80fb",
+"assets/fonts/MaterialIcons-Regular.otf": "8d2f1887f120f187c15d9d888f5cd16b",
 "assets/lib/assets/fonts/Satoshi-Black.ttf": "f12126e8a8e529e8195c7357dd5ad0c4",
 "assets/lib/assets/fonts/Satoshi-Bold.ttf": "50eee48d495ab752b3e6b873b1206f10",
 "assets/lib/assets/fonts/Satoshi-Light.ttf": "02d43df8e0b9f0acb1d1c6b40aaa5b7e",
@@ -40,9 +40,9 @@ const RESOURCES = {"assets/AssetManifest.bin": "64b16a976bf1115fea23b89cd8886e95
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "7629d7ce9e11d24e9c034e3cd94cfae7",
-"/": "7629d7ce9e11d24e9c034e3cd94cfae7",
-"main.dart.js": "5b031292b9b0133695cf0071e2c7d020",
+"index.html": "793bfd84ac1b8d38c82a48e57cd31793",
+"/": "793bfd84ac1b8d38c82a48e57cd31793",
+"main.dart.js": "6e9ac81fa42e5291875eea2733e3fdd1",
 "manifest.json": "87a30b91b0a09d62242aaae02bf02d07",
 "version.json": "dfaba7a3dce35f75081b1e8ad20da77b"};
 // The application shell files that are downloaded before a service worker can

@@ -4,6 +4,7 @@ import 'package:facultysupportdesk/widgets/academicyears/academic_year_list.dart
 import 'package:flutter/material.dart';
 
 import '../../layout/main_layout.dart';
+import '../../route_guards.dart';
 
 class AdminMainView extends StatefulWidget {
   const AdminMainView({super.key});
@@ -51,6 +52,19 @@ class _AdminMainViewState extends State<AdminMainView> {
               ],
             )
     );
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('admin', context);
   }
 
 

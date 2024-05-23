@@ -13,7 +13,8 @@ class AcademicYear with DisplayMixin{
     this.registrarID,
     this.yearEnd,
     this.yearStart,
-    this.isDefault
+    this.isDefault,
+    this.semester
   });
 
   final BuildContext? context;
@@ -22,6 +23,7 @@ class AcademicYear with DisplayMixin{
   final String? registrarID;
   final String? id;
   final bool? isDefault;
+  final String? semester;
 
 
   factory AcademicYear.fromMap(Map<String, dynamic> data, String id){
@@ -31,6 +33,7 @@ class AcademicYear with DisplayMixin{
       yearEnd: data['yearEnd'],
       yearStart: data['yearStart'],
       isDefault: data['isDefault'],
+      semester: data['semester']
     );
   }
 
@@ -50,7 +53,8 @@ class AcademicYear with DisplayMixin{
             'registrarID': _firebase.currentUser?.uid,
             'yearEnd': yearEnd,
             'yearStart': yearStart,
-            'isDefault': isDefault
+            'isDefault': isDefault,
+            'semester': semester,
           });
         }
       } else {
@@ -58,7 +62,8 @@ class AcademicYear with DisplayMixin{
           'registrarID': _firebase.currentUser?.uid,
           'yearEnd': yearEnd,
           'yearStart': yearStart,
-          'isDefault': isDefault
+          'isDefault': isDefault,
+          'semester': semester,
         });
       }
 
@@ -81,7 +86,8 @@ class AcademicYear with DisplayMixin{
             await academicYears.doc(id).update({
               'yearEnd': yearEnd,
               'yearStart': yearStart,
-              'isDefault': isDefault
+              'isDefault': isDefault,
+              'semester': semester,
             });
           } else {
             showError(
@@ -96,7 +102,8 @@ class AcademicYear with DisplayMixin{
           await academicYears.doc(id).update({
             'yearEnd': yearEnd,
             'yearStart': yearStart,
-            'isDefault': isDefault
+            'isDefault': isDefault,
+            'semester': semester,
           });
         }
       } else {

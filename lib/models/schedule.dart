@@ -16,7 +16,6 @@ class Schedule with DisplayMixin{
     this.timeStart,
     this.academicYearID,
     this.facultyID,
-    this.semester
   });
 
   final BuildContext? context;
@@ -26,7 +25,7 @@ class Schedule with DisplayMixin{
   final Timestamp? timeEnd;
   final String? academicYearID;
   final String? facultyID;
-  final String? semester;
+
 
   factory Schedule.fromMap(Map<String, dynamic> data, String id){
     return Schedule(
@@ -36,7 +35,6 @@ class Schedule with DisplayMixin{
       timeEnd: data['timeEnd'],
       academicYearID: data['academicYearID'],
       facultyID: data['facultyID'],
-      semester: data['semester']
     );
   }
 
@@ -48,7 +46,6 @@ class Schedule with DisplayMixin{
         'timeStart': timeStart,
         'timeEnd': timeEnd,
         'academicYearID': academicYear.id,
-        'semester': semester,
         'facultyID': _firebase.currentUser?.uid!
       });
     } on FirebaseException catch (e){
@@ -66,7 +63,6 @@ class Schedule with DisplayMixin{
         'title': title,
         'timeStart': timeStart,
         'timeEnd': timeEnd,
-        'semester': semester,
       });
     } on FirebaseException catch (e){
       showError(
@@ -99,9 +95,8 @@ class Schedule with DisplayMixin{
     return result;
   }
 
-  Future <List<Schedule>> getScheduleByFacultyIDSemesterandAY() async {
+  Future <List<Schedule>> getScheduleByFacultyIDByAY() async {
     QuerySnapshot querySnapshot =  await schedules
-        .where('semester', isEqualTo: semester)
         .where('academicYearID', isEqualTo: academicYearID)
         .where('facultyID', isEqualTo: _firebase.currentUser?.uid)
         .get();

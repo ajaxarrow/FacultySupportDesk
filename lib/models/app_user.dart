@@ -115,6 +115,16 @@ class AppUser with DisplayMixin{
     return result[0];
   }
 
+  Future<String> getUserRoleById(String id) async {
+    QuerySnapshot querySnapshot =  await users
+        .where('id', isEqualTo: id)
+        .get();
+
+    final result = querySnapshot.docs.map((doc) =>
+        AppUser.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+    return result[0].role!;
+  }
+
 
   Future<AppUser> getUserByEmail(String email) async {
     QuerySnapshot querySnapshot =  await users
@@ -150,10 +160,12 @@ class AppUser with DisplayMixin{
 
   Future<List<AppUser>> getUsers() async {
     QuerySnapshot querySnapshot = await users
-        .where('role', whereIn: ['faculty', 'registrar'])
+        .where('role', whereIn: ['faculty', 'registrar', 'student'])
         .get();
     final allUsers = querySnapshot.docs.map((doc) => AppUser.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
     return allUsers;
   }
+
+
 
 }

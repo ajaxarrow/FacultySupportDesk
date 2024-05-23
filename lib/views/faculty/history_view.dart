@@ -3,6 +3,8 @@ import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/widgets/consultations/consultation_list.dart';
 import 'package:flutter/material.dart';
 
+import '../../route_guards.dart';
+
 class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
 
@@ -23,6 +25,12 @@ class _HistoryViewState extends State<HistoryView> {
     setState(() {
 
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    isAuthenticated('faculty', context);
   }
 
   @override

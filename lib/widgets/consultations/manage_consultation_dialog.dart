@@ -20,6 +20,8 @@ class ManageConsultationDialog extends StatefulWidget {
 
 class _ManageConsultationDialogState extends State<ManageConsultationDialog> {
   bool isLoading = false;
+  String selectedStatus = 'Declined';
+  String selectedRoom = 'Room 1';
   @override
   Widget build(BuildContext context) {
     final facultyCommentController = TextEditingController();
@@ -110,29 +112,105 @@ class _ManageConsultationDialogState extends State<ManageConsultationDialog> {
                 ),
               ),
               const SizedBox(height: 25),
+              const Text('Response:', style: TextStyle(fontWeight: FontWeight.w500)),
+              const SizedBox(height: 8),
+              DropdownButton(
+                  value: selectedStatus,
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'Approved',
+                        child: Text('Approved')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Declined',
+                        child: Text('Declined')
+                    ),
+                  ],
+                  onChanged: (value){
+                    setState(() {
+                      selectedStatus = value!;
+                    });
+                  }
+              ),
+              selectedStatus == 'Approved' ? const SizedBox(height: 25) : const SizedBox.shrink(),
+              selectedStatus == 'Approved' ? const Text('Room:', style: TextStyle(fontWeight: FontWeight.w500)) : const SizedBox.shrink(),
+              selectedStatus == 'Approved' ? const SizedBox(height: 8) : const SizedBox.shrink(),
+              selectedStatus == 'Approved' ? DropdownButton(
+                  value: selectedRoom,
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'Room 1',
+                        child: Text('Room 1')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Room 2',
+                        child: Text('Room 2')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Room 3',
+                        child: Text('Room 3')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 21',
+                        child: Text('Lab 21')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 22',
+                        child: Text('Lab 22')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 23',
+                        child: Text('Lab 23')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 24',
+                        child: Text('Lab 24 ')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 25',
+                        child: Text('Lab 25')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Lab 26',
+                        child: Text('Lab 26')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Conference Room',
+                        child: Text('Conference Room')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Training Room',
+                        child: Text('Training Room')
+                    ),
+                    DropdownMenuItem(
+                        value: 'Faculty Office',
+                        child: Text('Faculty Office')
+                    ),
+                    DropdownMenuItem(
+                        value: 'SDD',
+                        child: Text('SDD')
+                    ),
+                  ],
+                  onChanged: (value){
+                    setState(() {
+                      selectedRoom = value!;
+                    });
+                  }
+              ) : const SizedBox.shrink(),
+              const SizedBox(height: 25),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffdae2f3),
+                            backgroundColor: const Color(0xffdae2f3),
                             padding: const EdgeInsets.symmetric(vertical: 19)
                         ),
                         onPressed: (){
-                          save(ConsultationRequest(
-                              id: widget.consultation.id,
-                              studentID: widget.consultation.studentID,
-                              facultyID: widget.consultation.facultyID,
-                              requestTitle: widget.consultation.requestTitle,
-                              requestDescription: widget.consultation.requestDescription,
-                              proposedTimeStart: widget.consultation.proposedTimeStart,
-                              proposedTimeEnd: widget.consultation.proposedTimeEnd,
-                              facultyComment: facultyCommentController.text,
-                              status: 'Declined'
-                          ));
+                          Navigator.of(context).pop();
                         },
                         child: const Text(
-                            'Decline Request',
+                            'Cancel',
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff3b5ba9)
@@ -156,11 +234,12 @@ class _ManageConsultationDialogState extends State<ManageConsultationDialog> {
                               proposedTimeStart: widget.consultation.proposedTimeStart,
                               proposedTimeEnd: widget.consultation.proposedTimeEnd,
                               facultyComment: facultyCommentController.text,
-                              status: 'Approved'
+                              room: selectedRoom,
+                              status: selectedStatus,
                           ));
                         },
                         child: const Text(
-                            'Accept Request',
+                            'Send Request',
                             style: TextStyle(
                                 fontSize: 16
                             )

@@ -2,7 +2,7 @@ import 'package:facultysupportdesk/widgets/users/user_dialog_form.dart';
 import 'package:flutter/material.dart';
 import '../../models/app_user.dart';
 
-class UserItem extends StatelessWidget {
+class UserItem extends StatefulWidget {
   const UserItem({
     super.key,
     required this.user,
@@ -12,6 +12,19 @@ class UserItem extends StatelessWidget {
   final AppUser user;
   final Function() onUpdateUserList;
 
+  @override
+  State<UserItem> createState() => _UserItemState();
+}
+
+class _UserItemState extends State<UserItem> {
+  bool isActive = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isActive = widget.user.isActive!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +35,14 @@ class UserItem extends StatelessWidget {
           builder: (ctx) => SimpleDialog(
         children: [
             UserDialogForm(
-            onUpdateUser: onUpdateUserList,
+            onUpdateUser: widget.onUpdateUserList,
             mode: Mode.update,
-            user: user,
+            user: widget.user,
           )
         ],
       )
       );
     }
-
-
-
 
     return Card(
         margin: const EdgeInsets.symmetric(
@@ -50,7 +60,7 @@ class UserItem extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                      user.name!,
+                      widget.user.name!,
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16
@@ -58,7 +68,7 @@ class UserItem extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    user.role!
+                    widget.user.role!
                   )
                 ],
               ),
@@ -67,9 +77,30 @@ class UserItem extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Text(user.email!),
+                  Text(widget.user.email!),
                   const Spacer(),
-                  Text(user.isActive! ? 'Active' : 'Inactive')
+                  Switch(
+                      value: isActive!,
+                      onChanged: (value) async {
+                        await AppUser(
+                            uid: widget.user!.uid!,
+                            isActive: value,
+                            role: widget.user!.role!,
+                            name: widget.user!.name!,
+                            context: context
+                        ).updateUser();
+                        setState(() {
+                          isActive = value;
+                        });
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text("User Updated!"),
+                        ));
+                      }
+
+                  ),
+                  Text(isActive! ? 'Active' : 'Inactive'),
                 ],
               ),
               const SizedBox(

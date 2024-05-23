@@ -67,6 +67,16 @@ class _MainLayoutState extends State<MainLayout> {
           label: 'Academic Year',
         ),
         const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
+          label: 'Consultation Requests',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.hourglass),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.hourglass),
+          label: 'Consultation History',
+        ),
+        const BottomNavigationBarItem(
           icon: Icon(Icons.logout), // Logout icon
           label: 'Logout',
         ),
@@ -84,6 +94,16 @@ class _MainLayoutState extends State<MainLayout> {
           label: 'Users',
         ),
         const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.chatsTeardrop),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.chatsTeardrop),
+          label: 'Consultation Requests',
+        ),
+        const BottomNavigationBarItem(
+          icon: PhosphorIcon(PhosphorIconsRegular.hourglass),
+          activeIcon: PhosphorIcon(PhosphorIconsFill.hourglass),
+          label: 'Consultation History',
+        ),
+        const BottomNavigationBarItem(
           icon: Icon(Icons.logout), // Logout icon
           label: 'Logout',
         ),
@@ -95,23 +115,27 @@ class _MainLayoutState extends State<MainLayout> {
   List<String> get _navBarItemLinks {
     if (widget.role == Role.faculty) {
       return [
-        '/main',
-        '/history',
-        '/calendar',
-        '/activities',
-        '/schedule',
-        '/schedule-history',
+        '/faculty/main',
+        '/faculty/history',
+        '/faculty/calendar',
+        '/faculty/activities',
+        '/faculty/schedule',
+        '/faculty/schedule-history',
         '/logout',
       ];
     } else if (widget.role == Role.registrar) {
       return [
-        '/registrar-main',
+        '/registrar/main',
+        '/registrar/consultation',
+        '/registrar/history',
         '/logout',
       ];
     } else if (widget.role == Role.admin) {
       return [
-        '/registrar-main',
-        '/users',
+        '/admin/main',
+        '/admin/users',
+        '/admin/consultation',
+        '/admin/history',
         '/logout',
       ];
     }

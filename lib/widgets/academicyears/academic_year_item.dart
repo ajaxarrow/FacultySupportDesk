@@ -2,7 +2,7 @@ import 'package:facultysupportdesk/models/academic_year.dart';
 import 'package:facultysupportdesk/widgets/academicyears/academic_year_dialog_form.dart';
 import 'package:flutter/material.dart';
 
-class AcademicYearItem extends StatelessWidget {
+class AcademicYearItem extends StatefulWidget {
   const AcademicYearItem({
     super.key,
     required this.academicYear,
@@ -11,6 +11,20 @@ class AcademicYearItem extends StatelessWidget {
 
   final AcademicYear academicYear;
   final Function() onUpdateList;
+
+  @override
+  State<AcademicYearItem> createState() => _AcademicYearItemState();
+}
+
+class _AcademicYearItemState extends State<AcademicYearItem> {
+  bool isDefault = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isDefault = widget.academicYear.isDefault!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +37,8 @@ class AcademicYearItem extends StatelessWidget {
                 children: [
                   AcademicYearDialogForm(
                     mode: Mode.update,
-                    academicYear: academicYear,
-                    onUpdateAcademicYear: onUpdateList,
+                    academicYear: widget.academicYear,
+                    onUpdateAcademicYear: widget.onUpdateList,
                   )
                 ],
               )
@@ -47,14 +61,36 @@ class AcademicYearItem extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                      '${academicYear.yearStart} - ${academicYear.yearEnd}',
+                      '${widget.academicYear.yearStart} - ${widget.academicYear.yearEnd}',
                       style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16
                       )
                   ),
                   const Spacer(),
-                  academicYear.isDefault == true ? const Text('Default') : const SizedBox.shrink()
+                  Switch(
+                      value: isDefault!,
+                      onChanged: (value) async {
+                        await AcademicYear(
+                          context: context,
+                          yearStart: widget.academicYear.yearStart!,
+                          yearEnd: widget.academicYear.yearEnd!,
+                          isDefault: value,
+                          id: widget.academicYear!.id!,
+                          semester: widget.academicYear.semester!,
+                        ).updateAcademicYear();
+                        setState(() {
+                          isDefault = value;
+                        });
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text("Academic Year Updated!"),
+                        ));
+                      }
+
+                  ),
+                  Text(isDefault! ? 'Default' : 'Not Default'),
                 ],
               ),
               const SizedBox(
@@ -62,12 +98,14 @@ class AcademicYearItem extends StatelessWidget {
               ),
               Row(
                 children: [
+                  Text(widget.academicYear.semester!),
+                  const Spacer(),
                   TextButton.icon(
                       onPressed: showAcademicYearFormDialog,
                       label: const Text('Edit'),
                       icon: const Icon(Icons.edit,
                           size: 16)
-                  )
+                  ),
                 ],
               )
             ],

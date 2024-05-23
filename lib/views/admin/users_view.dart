@@ -1,12 +1,10 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../layout/main_layout.dart';
 import '../../models/app_user.dart';
+import '../../route_guards.dart';
 import '../../widgets/users/user_dialog_form.dart';
 import '../../widgets/users/user_list.dart';
-
 
 class UsersView extends StatefulWidget {
   const UsersView({super.key});
@@ -43,6 +41,13 @@ class _UsersViewState extends State<UsersView> {
           onAddUser: _refreshList,
         )
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isAuthenticated('admin', context);
   }
 
   @override
