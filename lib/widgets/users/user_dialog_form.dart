@@ -25,6 +25,7 @@ class UserDialogForm extends StatefulWidget {
 
 class _UserDialogFormState extends State<UserDialogForm> {
   final _form = GlobalKey<FormState>();
+  String role = '';
   bool showPassword = true;
   bool isRegister = true;
   int selectedValue = 1;
@@ -44,6 +45,7 @@ class _UserDialogFormState extends State<UserDialogForm> {
     if(widget.user != null){
       nameController.text = widget.user!.name!;
       isActive = widget.user!.isActive!;
+      role = widget.user!.role!;
       if(widget.user!.role! == 'faculty'){
         setState(() {
           selectedValue = 1;
@@ -179,7 +181,7 @@ class _UserDialogFormState extends State<UserDialogForm> {
                           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
                         ),
                       ) : const SizedBox.shrink(),
-                      isRegister && widget.user!.role! != 'student' ? CustomRadioButtonWidget(
+                      isRegister && role != 'student' ? CustomRadioButtonWidget(
                           onValueChanged: onRadioValueChanged,
                           initialValue: selectedValue) : const SizedBox.shrink(),
                       isRegister ? const SizedBox(

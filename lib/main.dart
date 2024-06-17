@@ -1,5 +1,7 @@
 import 'package:facultysupportdesk/models/consultation_request.dart';
 import 'package:facultysupportdesk/themes/theme.dart';
+import 'package:facultysupportdesk/views/admin/admin_consultation.dart';
+import 'package:facultysupportdesk/views/admin/admin_consultation_history.dart';
 import 'package:facultysupportdesk/views/admin/admin_main_view.dart';
 import 'package:facultysupportdesk/views/admin/users_view.dart';
 import 'package:facultysupportdesk/views/faculty/activities_view.dart';
@@ -53,8 +55,8 @@ class App extends StatelessWidget {
         '/registrar/history': (context) => const RegistrarConsultationHistory(),
         '/admin/main': (context) => const AdminMainView(),
         '/admin/users': (context) => const UsersView(),
-        '/admin/consultation': (context) => const RegistrarConsultation(),
-        '/admin/history': (context) => const RegistrarConsultationHistory()
+        '/admin/consultation': (context) => const AdminConsultation(),
+        '/admin/history': (context) => const AdminConsultationHistory()
       },
     );
   }
