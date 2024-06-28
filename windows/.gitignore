@@ -9,8 +9,6 @@ flutter/ephemeral/
 # Visual Studio build-related files.
 x64/
 x86/
-installers/
-windows/runner/resources/faculty_support_desk_inno_script.iss
 
 # Visual Studio cache files
 # files ending in .cache can be ignored

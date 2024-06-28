@@ -30,6 +30,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+installers/
+windows/runner/resources/faculty_support_desk_inno_script.iss
 
 # Symbolication related
 app.*.symbols
