@@ -60,12 +60,13 @@ class ScheduleItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                          schedule.title!,
+                          '${schedule.title!}${schedule.abbreviatedDays!.isNotEmpty ? ' (${schedule.abbreviatedDays})' : ''}',
                           style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 16
                           )
                       ),
+
                       // isLarge ? Text(schedule.semester!) : const SizedBox.shrink(),
                     ],
                   ),

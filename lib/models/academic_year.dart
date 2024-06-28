@@ -135,6 +135,21 @@ class AcademicYear with DisplayMixin{
     }
   }
 
+  Future<AcademicYear> getAcademicYearByID(String id) async {
+    DocumentSnapshot docSnapshot = await academicYears.doc(id).get();
+
+    // Check if the document exists
+    if (docSnapshot.exists) {
+      // Convert the document data to an AppUser object
+      AcademicYear academicYear = AcademicYear.fromMap(docSnapshot.data() as Map<String, dynamic>, docSnapshot.id);
+      return academicYear;
+    } else {
+      // Handle the case where the document does not exist
+      throw Exception('User with ID $id not found');
+    }
+
+  }
+
   Future<List<AcademicYear>> getAcademicYears() async {
     QuerySnapshot querySnapshot =  await academicYears.get();
     final allAcademicYears = querySnapshot.docs.map((doc) => AcademicYear.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();

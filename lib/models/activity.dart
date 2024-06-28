@@ -67,8 +67,6 @@ class Activity with DisplayMixin{
       1.0, // Opacity
     );
 
-
-
     return Appointment(
       color: color,
       subject: data['activityTitle'],

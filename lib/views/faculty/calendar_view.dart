@@ -1,5 +1,6 @@
 import 'package:facultysupportdesk/layout/main_layout.dart';
 import 'package:facultysupportdesk/models/activity.dart';
+import 'package:facultysupportdesk/models/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -21,7 +22,8 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
 
   Future<void> fetchAppointments() async {
     _appointments.clear();
-    _appointments = await Activity().getAppointmentsByFacultyID();
+    _appointments.addAll(await Schedule().getAppointments());
+    _appointments.addAll(await Activity().getAppointmentsByFacultyID());
   }
 
   @override
@@ -40,6 +42,7 @@ class _CalendarOfActivitiesViewState extends State<CalendarOfActivitiesView> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           body = const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          print(snapshot.error);
           body = Center(child: Text('Error: ${snapshot.error}'));
         } else {
           body = Column(

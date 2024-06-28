@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:facultysupportdesk/models/academic_year.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -45,6 +46,32 @@ TimeOfDay convertTimestampToTimeOfDay(Timestamp timestamp) {
 
   // Create TimeOfDay object
   return TimeOfDay(hour: hour, minute: minute);
+}
+
+Future<Timestamp> convertTimeOfDayToTimeStampV2(TimeOfDay time ) async {
+  AcademicYear academicYear = await AcademicYear().getDefault();
+  Timestamp date;
+  switch (academicYear.semester) {
+    case '1st Semester':
+      date = Timestamp.fromDate(DateTime(
+          int.parse(academicYear.yearStart!), 8, 1, time.hour, time.minute
+      ));
+
+      break;
+    case '2nd Semester':
+      date = Timestamp.fromDate(DateTime(
+          int.parse(academicYear.yearEnd!), 1, 1, time.hour, time.minute
+      ));
+      break;
+    case 'Midyear':
+      date = Timestamp.fromDate(DateTime(
+          int.parse(academicYear.yearStart!), 6, 1, time.hour, time.minute
+      ));
+      break;
+    default:
+      throw Exception('Unknown semester type');
+  }
+  return date;
 }
 
 Timestamp convertTimeOfDayToTimeStamp(TimeOfDay time ){
