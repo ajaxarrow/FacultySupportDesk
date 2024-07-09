@@ -67,7 +67,6 @@ class ConsultationRequest with DisplayMixin{
         'createdAt': FieldValue.serverTimestamp()
       });
 
-
     } on FirebaseException catch(e){
       showError(
           errorMessage: e.message!,

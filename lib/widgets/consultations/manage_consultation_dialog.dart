@@ -1,6 +1,7 @@
-import 'package:facultysupportdesk/main.dart';
+import 'package:facultysupportdesk/models/activity.dart';
 import 'package:facultysupportdesk/models/app_user.dart';
 import 'package:facultysupportdesk/models/consultation_request.dart';
+import 'package:facultysupportdesk/models/schedule.dart';
 import 'package:facultysupportdesk/services/mail_sender.dart';
 import 'package:flutter/material.dart';
 
@@ -19,50 +20,60 @@ class ManageConsultationDialog extends StatefulWidget {
 }
 
 class _ManageConsultationDialogState extends State<ManageConsultationDialog> {
+  final facultyCommentController = TextEditingController();
+  final form = GlobalKey<FormState>();
   bool isLoading = false;
   String selectedStatus = 'Declined';
   String selectedRoom = 'Room 1';
-  @override
-  Widget build(BuildContext context) {
-    final facultyCommentController = TextEditingController();
-    final form = GlobalKey<FormState>();
 
-    Future<void> sendEmail(ConsultationRequest consultation)async {
-      AppUser student = await AppUser().getUserById(consultation.studentID!);
-      AppUser faculty = await AppUser().getUserById(consultation.facultyID!);
-      await MailSender(
-          consultation: consultation,
-          faculty: faculty,
-          student: student
-      ).sendEmail();
-    }
+  Future<void> sendEmail(ConsultationRequest consultation)async {
+    AppUser student = await AppUser().getUserById(consultation.studentID!);
+    AppUser faculty = await AppUser().getUserById(consultation.facultyID!);
+    await MailSender(
+        consultation: consultation,
+        faculty: faculty,
+        student: student
+    ).sendEmail();
+  }
 
-    Future<void> save(ConsultationRequest consultationRequest) async{
-      setState(() {
-        isLoading = true;
-      });
-      final isValid = form.currentState!.validate();
-      if(!isValid){
-        return;
-      }
-      form.currentState!.save();
-      consultationRequest.manageConsultationRequest();
-      await sendEmail(consultationRequest);
+  Future<void> save(ConsultationRequest consultationRequest) async{
+    setState(() {
+      isLoading = true;
+    });
+    final isValid = form.currentState!.validate();
+    if(!isValid){
       setState(() {
         isLoading = false;
       });
-      Navigator.pop(context);
-      widget.onUpdateConsultationList();
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text("Consultation Request ${consultationRequest.status}"),
-      ));
+      return;
     }
+    form.currentState!.save();
+    consultationRequest.manageConsultationRequest();
+    if(selectedStatus == 'Approved'){
+      Activity(
+        activityTitle: widget.consultation!.requestTitle,
+        activityDescription: widget.consultation!.requestDescription,
+        facultyID: widget.consultation!.facultyID,
+        timeStart: widget.consultation!.proposedTimeStart,
+        timeEnd: widget.consultation!.proposedTimeEnd
+      ).addActivity();
+    }
+    await sendEmail(consultationRequest);
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.pop(context);
+    widget.onUpdateConsultationList();
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: const Duration(seconds: 2),
+      content: Text("Consultation Request ${consultationRequest.status}"),
+    ));
+  }
 
 
-
-
+  @override
+  Widget build(BuildContext context) {
 
     return Padding(
       padding: const EdgeInsets.all(20),

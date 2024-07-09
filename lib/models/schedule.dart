@@ -192,6 +192,7 @@ class Schedule with DisplayMixin{
     final academicYear = await AcademicYear().getDefault();
     QuerySnapshot querySnapshot =  await schedules
         .where('academicYearID', isEqualTo: academicYear.id)
+        .where('facultyID', isEqualTo: _firebase.currentUser?.uid)
         .get();
     List<Future<Appointment>> futureAppointments = querySnapshot.docs.map((doc) async {
       return await convertToAppointment(doc.data() as Map<String, dynamic>, doc.id);
